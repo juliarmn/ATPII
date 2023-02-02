@@ -1,45 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int empilha(int topo, int vet[], int elem) {
-  vet[topo] = elem;
-  return (topo + 1);
+typedef struct Pilha {
+  int num;
+  struct Pilha *embaixo;
+} pilha;
+
+void printa(pilha *topo) {
+  if(topo == NULL){
+    printf("Num tem\n");
+    return;
+  }
+  printf("/---/\n");
+  while(topo != NULL){
+    printf("%d\n", topo->num);
+    topo = topo->embaixo;
+  }
+  printf("/---/\n");
 }
 
-int desempilha(int *topo, int vet[]) {
-  int aux;
-  aux = (*topo) - 1;
-  return aux;
+pilha *empilha(pilha *topo, pilha *elemento) {
+  elemento->embaixo = topo;
+  return elemento;
 }
 
-int main() {
-  int topo = 0;
-  int vet[10000], elem;
-  int op, i;
+pilha *tira(pilha **topo) {
+  pilha *aux = *topo;
+  if (!*topo) {
+    printf("\nNão tem o que tirar\n");
+    return(NULL);
+  }
+  *topo = aux->embaixo;
+  return(aux);
+}
+
+int main () {
+  pilha  *topo = NULL;
+  int op;
   do {
     printf("1)Empilhar\n2)Tirar\n3)Mostrar\n");
     scanf("%d", &op);
-    switch (op) {
+    switch(op) {
       case 1: {
+        pilha *elemento = malloc(sizeof(pilha));
         printf("Digite o num:\n");
-        scanf("%d", &elem);
-        topo = empilha(topo, vet, elem);
+        scanf("%d", &elemento->num);
+        topo = empilha(topo, elemento);
         break;
       }
       case 2: {
-        if (topo == 0) {
-          break;
-        }
-        topo =  desempilha(&topo, vet);
+        free(tira(&topo));
         break;
       }
       case 3: {
-        i = 0;
-        printf("/---/\n");
-        for (i = topo -1; i >= 0; i --) {
-            printf("%d\n", vet[i]);
-        }
-        printf("/---/\n");
+        printa(topo);
         break;
       }
     }
