@@ -144,7 +144,7 @@ int main()
 {
   Fila *head = NULL, *head_fila_principal = NULL;
   int idade, tempo_chegada, num_pessoas, count, removeu = 1;
-  int i, tempo_decorrido, tempo_inicio;
+  int i, tempo_decorrido, tempo_atual;
   scanf("%d", &num_pessoas);
   for (i = 0; i < num_pessoas; i++)
   {
@@ -153,23 +153,20 @@ int main()
     insere_tempo(&head, idade, tempo_chegada);
   }
   tempo_decorrido = head->tempo_chegada;
-  tempo_inicio = head->tempo_chegada;
+  tempo_atual = head->tempo_chegada;
   while (head != NULL)
   {
-    if (tempo_decorrido == 3 + tempo_inicio)
+    if (tempo_atual >= 3)
     {
+      tempo_atual = 0;
       remover(&head_fila_principal);
       if (head_fila_principal != NULL)
       {
         head_fila_principal->prioridade = 999;
       }
-      tempo_inicio = tempo_decorrido;
     }
     if (tempo_decorrido == head->tempo_chegada)
     {
-      if (head_fila_principal == NULL) {
-        tempo_inicio = tempo_decorrido;
-      }
       while (head != NULL && tempo_decorrido == head->tempo_chegada)
       {
         insere_idade(&head_fila_principal, head->idade, head->tempo_chegada, head->prioridade);
@@ -180,7 +177,8 @@ int main()
       printf("\n");
     }
     tempo_decorrido++;
+    tempo_atual++;
   }
-  // Pode sorrir Julia, depois de 2 dias vocï¿½ conseguiu
+  // Pode sorrir Julia, depois de 2 dias voce conseguiu
   return 0;
 }
